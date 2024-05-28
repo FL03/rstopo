@@ -53,9 +53,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: rustup
+      - name: setup (rustup)
         run: rustup default nightly && rustup update
-      - run: cargo bench --features full -r -v --workspace
+      - name: cargo (bench)
+        run: cargo bench --features full -v --workspace
   test:
     name: Test
     strategy:
