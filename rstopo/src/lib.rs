@@ -1,14 +1,18 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+/*
+    Appellation: rstopo <module>
+    Contrib: FL03 <jo3mccain@icloud.com>
+*/
+//! # rstopo
+//!
+//!
+#![cfg_attr(not(feature = "std"), no_std)]
+#![crate_name = "rstopo"]
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[cfg(feature = "alloc")]
+extern crate alloc;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub mod simplex;
+
+pub mod prelude {
+    pub use super::simplex::prelude::*;
 }

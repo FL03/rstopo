@@ -11,6 +11,10 @@ repository = "https://github.com/FL03/rstopo"
 version = "0.0.0"
 
 [workspace.dependencies]
+anyhow = "1"
+lazy_static = "1"
+num = { default-features = false, version = "0.4" }
+paste = "1"
 smart-default = "0.7"
 strum = { default-features = false, features = ["derive"], version = "0.26" }
 

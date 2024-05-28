@@ -1,6 +1,78 @@
 [package]
+authors.workspace = true
+build = "build.rs"
+categories.workspace = true
+description.workspace = true
+edition.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+license.workspace = true
 name = "rstopo"
-version = "0.1.0"
-edition = "2021"
+readme.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[features]
+default = [
+    "std",
+]
+
+full = [
+    "default",
+    "rand",
+    "serde",
+]
+
+# [FF] Dependencies
+alloc = [
+    "num/alloc",
+    "serde?/alloc",
+]
+
+rand = [
+    "num/rand"
+]
+
+serde = [
+    "dep:serde"
+]
+
+# ********* [FF] Environments *********
+std = [
+    "alloc",
+    "num/std",
+    "serde?/std",
+]
+
+wasm = []
+
+wasi = []
+
+[lib]
+bench = true
+crate-type = ["cdylib", "rlib"]
+doctest = false
+test = true
+
+[build-dependencies]
+
+[dev-dependencies]
+lazy_static.workspace = true
 
 [dependencies]
+num.workspace = true
+smart-default.workspace = true
+strum.workspace = true
+
+[dependencies.serde]
+default-features = false
+features = ["derive"]
+optional = true
+version = "1"
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+
+[target.wasm32-unknown-unknown.dependencies]
+
+[target.wasm32-wasi]
