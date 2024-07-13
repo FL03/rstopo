@@ -1,3 +1,28 @@
+[workspace]
+default-members = [
+    "rstopo"
+]
+
+exclude = [
+
+]
+
+members = [
+    "core",
+    "rstopo",
+    "simplex",
+]
+
+resolver = "2"
+
+[workspace.dependencies]
+anyhow = "1"
+lazy_static = "1"
+num = { default-features = false, version = "0.4" }
+paste = "1"
+smart-default = "0.7"
+strum = { default-features = false, features = ["derive"], version = "0.26" }
+
 [workspace.package]
 authors = ["FL03 <jo3mccain@icloud.com> (https://github.com/FL03)", "Scattered-Systems (https://github.com/scattered-systems)"]
 categories = [ "science" ]
@@ -10,28 +35,6 @@ readme = "README.md"
 repository = "https://github.com/FL03/rstopo"
 version = "0.0.1"
 
-[workspace.dependencies]
-anyhow = "1"
-lazy_static = "1"
-num = { default-features = false, version = "0.4" }
-paste = "1"
-smart-default = "0.7"
-strum = { default-features = false, features = ["derive"], version = "0.26" }
-
-[workspace]
-default-members = [
-    "rstopo"
-]
-
-exclude = [
-
-]
-
-members = [
-    "rstopo",
-]
-
-resolver = "2"
 
 [profile.dev]
 opt-level = 0

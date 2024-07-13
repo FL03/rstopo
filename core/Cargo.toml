@@ -7,14 +7,13 @@ edition.workspace = true
 homepage.workspace = true
 keywords.workspace = true
 license.workspace = true
-name = "rstopo"
+name = "rstopo-core"
 readme.workspace = true
 repository.workspace = true
 version.workspace = true
 
 [features]
 default = [
-    "simplex",
     "std",
 ]
 
@@ -24,43 +23,30 @@ full = [
     "serde",
 ]
 
-# ********* [FF] Features *********
-simplex = [
-    "dep:rstopo-simplex",
-]
-
 # [FF] Dependencies
 alloc = [
-    "rstopo-core/alloc",
-    "rstopo-simplex?/alloc",
+    "num/alloc",
+    "serde?/alloc",
 ]
 
 rand = [
-    "rstopo-core/rand",
-    "rstopo-simplex?/rand",
+    "num/rand"
 ]
 
 serde = [
-    "rstopo-core/serde",
-    "rstopo-simplex?/serde",
+    "dep:serde"
 ]
 
 # ********* [FF] Environments *********
 std = [
     "alloc",
-    "rstopo-core/std",
-    "rstopo-simplex?/std",
+    "num/std",
+    "serde?/std",
 ]
 
-wasm = [
-    "rstopo-core/wasm",
-    "rstopo-simplex?/wasm",
-]
+wasm = []
 
-wasi = [
-    "rstopo-core/wasi",
-    "rstopo-simplex?/wasi",
-]
+wasi = []
 
 [lib]
 bench = true
@@ -68,17 +54,30 @@ crate-type = ["cdylib", "rlib"]
 doctest = false
 test = true
 
-[dependencies.rstopo-core]
-default-features = false
-path = "../core"
-version = "0.0.1"
+[build-dependencies]
 
-[dependencies.rstopo-simplex]
+[dependencies]
+num.workspace = true
+smart-default.workspace = true
+
+[dependencies.serde]
 default-features = false
+features = ["derive"]
 optional = true
-path = "../simplex"
-version = "0.0.1"
+version = "1"
+
+[dependencies.strum]
+default-features = false
+features = ["derive"]
+version = "0.26"
+
+[dev-dependencies]
+lazy_static.workspace = true
 
 [package.metadata.docs.rs]
 all-features = true
 rustc-args = ["--cfg", "docsrs"]
+
+[target.wasm32-unknown-unknown.dependencies]
+
+[target.wasm32-wasi]

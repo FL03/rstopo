@@ -10,6 +10,14 @@ updates:
     schedule:
       interval: weekly
   - package-ecosystem: cargo
+    directory: /core
+    schedule:
+      interval: weekly
+  - package-ecosystem: cargo
     directory: /rstopo
+    schedule:
+      interval: weekly
+  - package-ecosystem: cargo
+    directory: /simplex
     schedule:
       interval: weekly

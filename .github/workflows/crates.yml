@@ -16,9 +16,60 @@ on:
   workflow_dispatch:
 
 jobs:
+  base:
+    env:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+    name: Publish (independent)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        features: [ core ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: cache
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/release
+      - name: Publish (${{ matrix.features }})
+        run: cargo publish --all-features -v -p ${{ github.event.repository.name }}-${{ matrix.features }}
+  features:
+    env:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+      CRATE: ${{ github.event.repository.name }}-${{ matrix.features }}
+    name: Publish (${{ github.event.repository.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        features: [ simplex ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: cache
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/release
+      - name: Publish (${{ matrix.features }})
+        run: cargo publish --all-features -v -p ${{ github.event.repository.name }}-${{ matrix.features }}
   publish:
+    env:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
     name: Publish (${{ github.event.repository.name }})
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: cargo publish --all-features -v -p ${{ github.event.repository.name }} --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+      - name: cache
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/release
+      - run: cargo publish --all-features -v -p ${{ github.event.repository.name }}
