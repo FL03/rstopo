@@ -23,7 +23,7 @@ full = [
     "serde",
 ]
 
-# [FF] Dependencies
+# ********* [FF] Dependencies *********
 alloc = [
     "num/alloc",
     "serde?/alloc",
@@ -42,6 +42,8 @@ std = [
     "alloc",
     "num/std",
     "serde?/std",
+    "strum/std",
+    "thiserror/std",
 ]
 
 wasm = []
@@ -58,18 +60,11 @@ test = true
 
 [dependencies]
 num.workspace = true
+serde = { optional = true, workspace = true }
+serde_derive = { optional = true, workspace = true }
 smart-default.workspace = true
-
-[dependencies.serde]
-default-features = false
-features = ["derive"]
-optional = true
-version = "1"
-
-[dependencies.strum]
-default-features = false
-features = ["derive"]
-version = "0.26"
+strum.workspace = true
+thiserror.workspace = true
 
 [dev-dependencies]
 lazy_static.workspace = true
