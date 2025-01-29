@@ -29,6 +29,10 @@ alloc = [
     "serde?/alloc",
 ]
 
+blas = [
+    "ndarray/blas",
+]
+
 rand = [
     "num/rand"
 ]
@@ -40,6 +44,7 @@ serde = [
 # ********* [FF] Environments *********
 std = [
     "alloc",
+    "ndarray/std",
     "num/std",
     "serde?/std",
     "strum/std",
@@ -59,6 +64,7 @@ test = true
 [build-dependencies]
 
 [dependencies]
+ndarray = { default-features = false, workspace = true }
 num.workspace = true
 serde = { optional = true, workspace = true }
 serde_derive = { optional = true, workspace = true }

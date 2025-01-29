@@ -2,9 +2,8 @@
     Appellation: n-simplex <module>
     Contrib: @FL03
 */
-use super::Factorial;
-use ndarray::{Array1, Array2, Axis};
-use ndarray_linalg::{Determinant, Lapack, Scalar, Solve,};
+use super::{Determinant, Factorial, Solve};
+use ndarray::{Array1, Array2};
 
 /// Represents an n-simplex in (n+1)-dimensional space.
 #[derive(Clone, Debug, PartialEq)]
@@ -12,7 +11,7 @@ pub struct NdSimplex<A> {
     vertices: Vec<Array1<A>>, // (n+1) vertices in (n+1)-dimensional space
 }
 
-impl<A> NdSimplex<A> where A: Scalar + num::traits::float::FloatCore {
+impl<A> NdSimplex<A> where A: Copy + core::iter::Sum + num::Float + num::traits::NumAssignOps {
     /// Creates a new simplex with the given vertices.
     pub fn new(vertices: Vec<Array1<A>>) -> Self {
         let dim = vertices.len();
@@ -38,11 +37,12 @@ impl<A> NdSimplex<A> where A: Scalar + num::traits::float::FloatCore {
         let mut b = Array1::<A>::zeros(n);
 
         for i in 0..n {
-            matrix.column_mut(i).assign(&(self.vertices[i + 1] - &self.vertices[0]));
+            matrix.column_mut(i).assign(&(self.vertices[i + 1].to_owned() - &self.vertices[0]));
             b[i] = (x - &self.vertices[0])[i];
         }
 
-        let solution = matrix.solve(&b).expect("Matrix inversion failed.");
+        // Solve the linear system to get the barycentric coordinates
+        let solution = matrix.solve(&b);
 
         let mut result = vec![A::zero(); n + 1];
         result[0] = A::one() - solution.sum();
@@ -53,14 +53,14 @@ impl<A> NdSimplex<A> where A: Scalar + num::traits::float::FloatCore {
     }
 
     /// Computes the volume of the simplex using the determinant formula.
-    pub fn volume(&self) -> A where A: Factorial + Lapack {
+    pub fn volume(&self) -> A where A: Factorial + num::FromPrimitive {
         let n = self.vertices.len() - 1;
         let mut matrix = Array2::<A>::zeros((n, n));
 
         for i in 0..n {
-            matrix.column_mut(i).assign(&(self.vertices[i + 1] - &self.vertices[0]));
+            matrix.column_mut(i).assign(&(self.vertices[i + 1].to_owned() - &self.vertices[0]));
         }
-        Array2::<A>::det(matrix).unwrap().abs() / A::from_usize(n.factorial()).unwrap()
+        matrix.determinant().abs() / A::from_usize(n.factorial()).unwrap()
     }
 
     /// Extracts a facet by removing one vertex.
@@ -82,9 +82,8 @@ impl<A> NdSimplex<A> where A: Scalar + num::traits::float::FloatCore {
         let mut matrix = Array2::<A>::zeros((n, n));
 
         for i in 0..n {
-            matrix.column_mut(i).assign(&(vertices[i + 1] - &vertices[0]));
+            matrix.column_mut(i).assign(&(vertices[i + 1].to_owned() - &vertices[0]));
         }
-
-        matrix.det().unwrap().abs() > A::epsilon()
+        matrix.determinant().abs() > A::epsilon()
     }
 }

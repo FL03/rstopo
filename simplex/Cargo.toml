@@ -43,9 +43,7 @@ test = true
 [dependencies]
 rstopo-core.workspace = true
 
-nalgebra ={ version = "0.33" }
 ndarray = { default-features = false, workspace = true }
-ndarray-linalg = "0.16"
 num.workspace = true
 serde = { default-features = false, optional = true, workspace = true }
 smart-default.workspace = true
