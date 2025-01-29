@@ -8,11 +8,14 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![crate_name = "rstopo"]
 
-#[cfg(feature = "alloc")]
-extern crate alloc;
-
-pub mod simplex;
+#[doc(inline)]
+pub use rstopo_core::*;
+#[cfg(feature = "simplex")]
+#[doc(inline)]
+pub use rstopo_simplex as simplex;
 
 pub mod prelude {
-    pub use super::simplex::prelude::*;
+    pub use rstopo_core::prelude::*;
+    #[cfg(feature = "simplex")]
+    pub use rstopo_simplex::prelude::*;
 }
